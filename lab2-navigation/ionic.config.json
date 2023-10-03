@@ -1,7 +1,0 @@
-{
-  "name": "lab2-navigation",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
