@@ -19,7 +19,10 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-button [routerLink]="['/test-page']">Navigate to test page with routerLink</ion-button>
-    <ion-button (click)="pushAboutPageOnToStack()">Push Test Page on to stack</ion-button>
+    <ion-button [routerLink]="['/test-page', { text: text }]">Navigate to test page with routerLink</ion-button>
+    <ion-button (click)="pushTestPageOnToStack()">Push Test Page on to stack</ion-button>
+    <ion-item>
+      <ion-input label="Enter your name here: " [(ngModel)]="text"></ion-input>
+    </ion-item>
   </ion-content>
 </div>
