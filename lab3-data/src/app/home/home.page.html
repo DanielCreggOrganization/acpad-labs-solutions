@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Home Page
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Below is a two-way data binding between the name property in the 
+       component class and the value of the ion-input element. -->
+  <ion-input fill="solid" label="Change text here -> " [(ngModel)]="name"></ion-input>
+  <!-- This below shows the value of the name variable -->
+  <h1>{{ name }}</h1>
+</ion-content>
