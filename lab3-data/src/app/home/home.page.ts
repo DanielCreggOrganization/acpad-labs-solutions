@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,12 @@ import { Component } from '@angular/core';
 export class HomePage {
   name: string = 'Bard';
   
-  constructor() {}
+  constructor(private storage: Storage) {}
+  
+  async ngOnInit() {
+    // If using a custom driver:
+    // await this.storage.defineDriver(MyCustomDriver)
+    await this.storage.create();
+  }
   
 }
