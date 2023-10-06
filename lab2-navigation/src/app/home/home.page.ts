@@ -11,8 +11,8 @@ export class HomePage {
   constructor(private router: Router) { }
 
   // Push the 'About' page onto the navigation stack
-  pushTestPageOnToStack() {
-    this.router.navigate(['/test-page']);
+  pushProductsPageOnToStack() {
+    this.router.navigate(['/products']);
   }
 
 }

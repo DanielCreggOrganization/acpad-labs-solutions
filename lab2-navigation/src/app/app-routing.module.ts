@@ -22,14 +22,18 @@ const routes: Routes = [
         loadChildren: () => import('./home/home.module').then((m) => m.HomePageModule),
       },
       {
-        path: 'test-page',
-        loadChildren: () => import('./test-page/test-page.module').then( m => m.TestPagePageModule)
+        path: 'products',
+        loadChildren: () => import('./products/products.module').then( m => m.ProductsPageModule)
       },
       {
-        path: 'test-page/:text',
-        loadChildren: () => import('./test-page/test-page.module').then( m => m.TestPagePageModule)
+        path: 'products/:text',
+        loadChildren: () => import('./products/products.module').then( m => m.ProductsPageModule)
       },
     ],
+  },
+  {
+    path: 'products',
+    loadChildren: () => import('./products/products.module').then( m => m.ProductsPageModule)
   },
 ];
 

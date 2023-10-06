@@ -4,7 +4,7 @@
       <ion-title>Menu Content</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-button [routerLink]="['/test-page']">Go to test page</ion-button>
+  <ion-button [routerLink]="['/products']">Go to products page</ion-button>
   <ion-menu-toggle>
     <ion-button>Click to close the menu</ion-button>
   </ion-menu-toggle>
@@ -19,10 +19,10 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-button [routerLink]="['/test-page', { text: text }]">Navigate to test page with routerLink</ion-button>
-    <ion-button (click)="pushTestPageOnToStack()">Push Test Page on to stack</ion-button>
+    <ion-button [routerLink]="['/products', { text: text }]">Navigate to products page with routerLink</ion-button>
+    <ion-button (click)="pushProductsPageOnToStack()">Push Products Page on to Stack</ion-button>
     <ion-item>
-      <ion-input label="Enter your name here: " [(ngModel)]="text"></ion-input>
+      <ion-input fill="solid" label="Enter your name here: " [(ngModel)]="text"></ion-input>
     </ion-item>
   </ion-content>
 </div>
