@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
+import { Storage } from '@ionic/storage-angular'; // https://github.com/ionic-team/ionic-storage
 
 @Component({
   selector: 'app-home',
@@ -16,5 +16,5 @@ export class HomePage {
     // await this.storage.defineDriver(MyCustomDriver)
     await this.storage.create();
   }
-  
+
 }
