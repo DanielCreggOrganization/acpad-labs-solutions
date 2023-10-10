@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage-angular';
 export class HomePage {
   // Define items property
   items: { key: string, value: string }[] = [];
+  numItems: number = 0;
   key = '';
   value = '';
   getItemKey = '';
@@ -61,6 +62,8 @@ export class HomePage {
       itemsTempStorage.push({ key: key, value: value }); 
     });
     // Save items property to items array so that it can be displayed in the view
-    this.items = itemsTempStorage; 
+    this.items = itemsTempStorage;
+    // Update numItems property
+    this.numItems = await this.storage.length();
   }
 }
