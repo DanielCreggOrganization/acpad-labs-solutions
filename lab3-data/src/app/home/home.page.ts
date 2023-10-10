@@ -59,7 +59,7 @@ export class HomePage {
     // Add item to items array
     await this.storage.forEach((value, key) => {
       // Push key and value to temporary storage
-      itemsTempStorage.push({ key: key, value: value }); 
+      itemsTempStorage.push({ key: key, value: value });
     });
     // Save items property to items array so that it can be displayed in the view
     this.items = itemsTempStorage;
