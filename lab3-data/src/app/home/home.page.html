@@ -11,22 +11,20 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Create/Update Key:</ion-label>
+          <ion-label position="floating">Enter Key:</ion-label>
           <ion-input type="text" [(ngModel)]="key"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Create/Update Value:</ion-label>
+          <ion-label position="floating">Enter Value:</ion-label>
           <ion-input type="text" [(ngModel)]="value"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col>
-        <ion-button (click)="setItem()">Set Item</ion-button>
+        <ion-button (click)="setItem()">Create/Update Item</ion-button>
       </ion-col>
     </ion-row>
-  </ion-grid>
-  <ion-grid>
     <ion-row>
       <ion-col>
         <ion-item>
@@ -44,15 +42,26 @@
         </ion-item>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label>Table of Records</ion-label>
+        <ion-list>
+          <ion-item-sliding *ngFor="let item of items">
+            <ion-item>
+              <ion-label>{{ item.key }}</ion-label>
+              <ion-label>{{ item.value }}</ion-label>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="removeListItem(item)">Delete</ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="clearItems()">Clear All Items</ion-button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
-  <br>
-  <ion-label>Table of Records</ion-label>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-label>{{ item.key }}</ion-label>
-      <ion-label>{{ item.value }}</ion-label>
-      <ion-button (click)="removeListItem(item)">Remove</ion-button>
-    </ion-item>
-  </ion-list>
-  <ion-button (click)="clearItems()">Clear All Items</ion-button>
 </ion-content>
