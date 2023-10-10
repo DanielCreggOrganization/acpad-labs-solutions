@@ -7,46 +7,60 @@ import { Storage } from '@ionic/storage-angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  // Define items property
   items: { key: string, value: string }[] = [];
-  key = ''; // initialize key property
-  value = ''; // initialize value property
-  getItemKey = ''; // initialize getItemKey property
-  itemValue = ''; // initialize itemValue property
-  removeItemKey = ''; // initialize removeItemKey property
+  key = '';
+  value = '';
+  getItemKey = '';
+  itemValue = '';
+  removeItemKey = '';
 
   constructor(private storage: Storage) {
-    this.initStorage();
+    this.initStorage(); // Call initStorage method on construction
   }
 
   async initStorage() {
-    await this.storage.create();
+    await this.storage.create(); // Create storage instance
+    await this.loadItems(); // Load items from storage
   }
 
   async setItem() {
-    await this.storage.set(this.key, this.value);
-    const index = this.items.findIndex(item => item.key === this.key);
-    if (index !== -1) {
-      this.items[index].value = this.value;
-    } else {
-      this.items.push({ key: this.key, value: this.value });
-    }
-    this.key = '';
-    this.value = '';
+    await this.storage.set(this.key, this.value); // Set item in storage
+    this.key = ''; // Clear key property
+    this.value = ''; // Clear value property
+    await this.loadItems(); // Load items from storage
   }
 
   async getItem() {
-    const value = await this.storage.get(this.getItemKey);
-    console.log(value);
-    this.itemValue = value;
+    const value = await this.storage.get(this.getItemKey); // Get item from storage
+    console.log(value); // Log item value to console
+    this.itemValue = value; // Set item value to itemValue property
   }
 
   async removeItem() {
-    await this.storage.remove(this.removeItemKey);
-    this.items = this.items.filter(item => item.key !== this.removeItemKey);
+    await this.storage.remove(this.removeItemKey); // Remove item from storage
+    await this.loadItems(); // Load items from storage
   }
 
   async removeListItem(item: { key: string, value: string }) {
-    await this.storage.remove(item.key);
-    this.items = this.items.filter(i => i !== item);
+    await this.storage.remove(item.key); // Remove item from storage
+    await this.loadItems(); // Load items from storage
+  }
+
+  async clearItems() {
+    await this.storage.clear(); // Clear all items from storage
+    await this.loadItems(); // Load items from storage
+  }
+
+  async loadItems() {
+    // Create a temporary array to store items
+    const itemsTempStorage: { key: string, value: string }[] = [];
+    // Add item to items array
+    await this.storage.forEach((value, key) => {
+      // Push key and value to temporary storage
+      itemsTempStorage.push({ key: key, value: value }); 
+    });
+    // Save items property to items array so that it can be displayed in the view
+    this.items = itemsTempStorage; 
   }
 }

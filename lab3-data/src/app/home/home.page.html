@@ -11,13 +11,13 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Create Key:</ion-label>
+          <ion-label position="floating">Create/Update Key:</ion-label>
           <ion-input type="text" [(ngModel)]="key"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Create Value:</ion-label>
+          <ion-label position="floating">Create/Update Value:</ion-label>
           <ion-input type="text" [(ngModel)]="value"></ion-input>
         </ion-item>
       </ion-col>
@@ -54,4 +54,5 @@
       <ion-button (click)="removeListItem(item)">Remove</ion-button>
     </ion-item>
   </ion-list>
+  <ion-button (click)="clearItems()">Clear All Items</ion-button>
 </ion-content>
