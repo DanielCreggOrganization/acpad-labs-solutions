@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Ionic Storage Demo
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Set Key:</ion-label>
+          <ion-input type="text" [(ngModel)]="key"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Set Value:</ion-label>
+          <ion-input type="text" [(ngModel)]="value"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="setItem()">Set Item</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Get Key:</ion-label>
+          <ion-input type="text" [(ngModel)]="getItemKey"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="getItem()">Get Item</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Show Value</ion-label>
+          <ion-input type="text" [(ngModel)]="itemValue" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="floating">Remove Record - Enter Key:</ion-label>
+          <ion-input type="text" [(ngModel)]="removeItemKey"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="removeItem()">Remove Item</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
