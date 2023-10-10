@@ -11,13 +11,13 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Set Key:</ion-label>
+          <ion-label position="floating">Create Key:</ion-label>
           <ion-input type="text" [(ngModel)]="key"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Set Value:</ion-label>
+          <ion-label position="floating">Create Value:</ion-label>
           <ion-input type="text" [(ngModel)]="value"></ion-input>
         </ion-item>
       </ion-col>
@@ -30,7 +30,7 @@
     <ion-row>
       <ion-col>
         <ion-item>
-          <ion-label position="floating">Get Key:</ion-label>
+          <ion-label position="floating">Read Key:</ion-label>
           <ion-input type="text" [(ngModel)]="getItemKey"></ion-input>
         </ion-item>
       </ion-col>
@@ -45,18 +45,13 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-          <ion-label position="floating">Remove Record - Enter Key:</ion-label>
-          <ion-input type="text" [(ngModel)]="removeItemKey"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-button (click)="removeItem()">Remove Item</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
+  <br>
+  <ion-label>Table of Records</ion-label>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <ion-label>{{ item.key }}</ion-label>
+      <ion-label>{{ item.value }}</ion-label>
+      <ion-button (click)="removeListItem(item)">Remove</ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
