@@ -17,12 +17,10 @@ export class HomePage {
   removeItemKey = '';
 
   constructor(private storage: Storage) {
-    this.initStorage(); // Call initStorage method on construction
   }
 
-  async initStorage() {
-    await this.storage.create(); // Create storage instance
-    await this.loadItems(); // Load items from storage
+  async ngOnInit() {
+    await this.storage.create();
   }
 
   async setItem() {
