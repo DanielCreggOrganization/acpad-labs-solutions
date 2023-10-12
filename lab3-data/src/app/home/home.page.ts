@@ -27,7 +27,7 @@ export class HomePage {
     await this.storage.set(this.key, this.value); // Set item in storage
     this.key = ''; // Clear key property
     this.value = ''; // Clear value property
-    await this.loadItems(); // Load items from storage
+    await this.showStorage(); // Load items from storage
   }
 
   async getItem() {
@@ -37,20 +37,20 @@ export class HomePage {
 
   async removeItem() {
     await this.storage.remove(this.removeItemKey); // Remove item from storage
-    await this.loadItems(); // Load items from storage
+    await this.showStorage(); // Load items from storage
   }
 
   async removeListItem(item: { key: string, value: string }) {
     await this.storage.remove(item.key); // Remove item from storage
-    await this.loadItems(); // Load items from storage
+    await this.showStorage(); // Load items from storage
   }
 
   async clearItems() {
     await this.storage.clear(); // Clear all items from storage
-    await this.loadItems(); // Load items from storage
+    await this.showStorage(); // Load items from storage
   }
 
-  async loadItems() {
+  async showStorage() {
     // Create a temporary array to store items
     const itemsTempStorage: { key: string, value: string }[] = [];
     // Add item to items array
