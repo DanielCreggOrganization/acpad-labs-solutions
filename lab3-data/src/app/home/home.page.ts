@@ -32,7 +32,6 @@ export class HomePage {
 
   async getItem() {
     const value = await this.storage.get(this.getItemKey); // Get item from storage
-    console.log(value); // Log item value to console
     this.itemValue = value; // Set item value to itemValue property
   }
 
