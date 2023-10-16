@@ -12,10 +12,10 @@ const routes: Routes = [
     // component: NgmoduleComponent,
     loadChildren: () => import('./ngmodule/ngmodule.module').then( m => m.NgmoduleModule)
   },
-  // add path to standalone component. components cannot be lazy-loaded directly because they need to be declared in an Angular module
+  // add path to standalone component. Any route can lazily load its routed, standalone component by using loadComponent:
   {
-    path: 'standalone',
-    component: StandaloneComponent,
+      path: 'standalone',
+      loadComponent: () => import('./standalone/standalone.component').then(mod => mod.StandaloneComponent)
   },
   {
     path: '',
@@ -31,3 +31,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+  
