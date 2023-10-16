@@ -1,0 +1,7 @@
+{
+  "name": "labX-blank-ngmodules",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
