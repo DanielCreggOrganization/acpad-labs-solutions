@@ -1,0 +1,7 @@
+{
+  "name": "labX-blank-standalone",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
