@@ -1,0 +1,7 @@
+{
+  "name": "lab5-ngmodules",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
