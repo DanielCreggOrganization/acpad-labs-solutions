@@ -3,6 +3,11 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+      // Add path to standalone component. Any route can lazily load its routed, standalone component by using loadComponent:
+      path: 'standalone',
+      loadComponent: () => import('./standalone/standalone.component').then(mod => mod.StandaloneComponent)
+  },
+  {
     path: 'ngmodule',
     loadChildren: () => import('./ngmodule/ngmodule.module').then( m => m.NgmoduleModule)
   },
