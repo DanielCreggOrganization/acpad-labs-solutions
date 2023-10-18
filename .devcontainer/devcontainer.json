@@ -1,9 +1,11 @@
 {
-    "name": "Ubuntu and Ionic Latest",
-    "image": "mcr.microsoft.com/devcontainers/base:latest",
-	"features": {
-        "ghcr.io/devcontainers-contrib/features/ionic-cli": {
-            "version": "latest"}
-    },
-    "postCreateCommand": "npm install -g npm@latest"
+  "name": "Ubuntu and Ionic Latest",
+  "image": "mcr.microsoft.com/devcontainers/base:latest",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/ionic-cli": {
+      "version": "latest"
+    }
+  },
+  // Install latest npm
+  "postCreateCommand": "npm install -g npm@latest"
 }
