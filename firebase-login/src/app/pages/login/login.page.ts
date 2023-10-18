@@ -77,6 +77,23 @@ export class LoginPage {
     }
   }
 
+  // Add sendReset function to the LoginPage class. This will call the resetPw method from the AuthService.
+  // This method will send a password reset email to the email address passed as parameter.
+  async sendReset() {
+    // Create a loading overlay. This will be displayed while the request is running.
+    const loading = await this.loadingController.create();
+    await loading.present();
+    // Call the resetPw method from the AuthService. This returns a promise.
+    await this.authService.resetPw(this.email.value);
+    // Dismiss the loading spinner
+    await loading.dismiss();
+    // Show an alert message
+    this.showAlert(
+      'Password reset',
+      'Check your inbox for the password reset link'
+    );
+  }
+
   // Show an alert message with the given header and message.
   async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({

@@ -49,6 +49,7 @@ export class AuthService {
   }
 
   resetPw(email: string) {
+    // Pass in athentication private and email address
     return sendPasswordResetEmail(this.auth, email);
   }
 

@@ -48,4 +48,13 @@
       >Create account</ion-button
     >
   </form>
+
+  <!-- Add reset password button -->
+  <ion-button
+    expand="block"
+    color="tertiary"
+    (click)="sendReset()"
+    [disabled]="email.invalid"
+    >Reset password</ion-button
+  >
 </ion-content>
