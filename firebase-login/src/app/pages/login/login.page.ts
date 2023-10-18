@@ -40,10 +40,10 @@ export class LoginPage {
   async register() {
     // Create a loading overlay. This will be displayed while the request is running.
     const loading = await this.loadingController.create();
-    await loading.present();  // <-- Show loading spinner
+    await loading.present(); // <-- Show loading spinner
     // Call the register method from the AuthService. This returns a user object if successful, or null if unsuccessful.
     const user = await this.authService.register(
-      this.credentials.getRawValue()  // <-- Pass the raw value of the form fields to the register method
+      this.credentials.getRawValue() // <-- Pass the raw value of the form fields to the register method
     );
     // Log the user object to the console. This will be `null` if the user was not created.
     console.log(
@@ -52,7 +52,7 @@ export class LoginPage {
     );
     // Dismiss the loading spinner
     await loading.dismiss();
-    
+
     // If the user is successfully created, redirect to the home page. Otherwise, display an error.
     if (user) {
       this.router.navigateByUrl('/home', { replaceUrl: true });
