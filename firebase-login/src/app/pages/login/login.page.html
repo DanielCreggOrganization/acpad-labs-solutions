@@ -15,7 +15,7 @@
       ></ion-input>
       <!-- Note appears under slot if input is invalid -->
       <ion-note
-        slot="error"
+        slot="end"
         *ngIf="(email.dirty || email.touched) && email.errors"
         >Email is invalid</ion-note
       >
@@ -29,10 +29,10 @@
       ></ion-input>
       <!-- Note appears under slot if input is invalid -->
       <ion-note
-        slot="error"
+        slot="end"
         *ngIf="(password.dirty || password.touched) && password.errors"
-        >Password needs to be 6 characters</ion-note
-      >
+        >Password needs to contain a minimum 6 characters
+      </ion-note>
     </ion-item>
     <!-- Add Log in button which is disabled while credentials are invalid -->
     <ion-button type="submit" expand="block" [disabled]="!credentials.valid"

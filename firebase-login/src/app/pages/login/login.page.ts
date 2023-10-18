@@ -15,7 +15,7 @@ export class LoginPage {
   // credentials is the name of the form group.
   credentials = this.fb.nonNullable.group({
     email: ['daniel.cregg@atu.ie', [Validators.required, Validators.email]],
-    password: ['123456', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   constructor(
