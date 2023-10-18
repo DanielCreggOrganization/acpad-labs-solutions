@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Note Taker
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <!-- Async pipe will subscribe to the observable and unsubscribe when the component is destroyed -->
+    <ion-item *ngFor="let note of notes | async">
+      <!-- One-way data binding. Here we are binding the note to the ion-item -->
+      {{ note }}
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <!-- Two-way data binding -->
+    <ion-input [(ngModel)]="newNote"></ion-input>
+    <ion-button (click)="addNote()">Add Note</ion-button>
+  </ion-item>
+  <ion-button routerLink="/home">Go back Home</ion-button>
+</ion-content>

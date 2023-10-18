@@ -20,6 +20,11 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    // Add path to notes module. Any route can lazily load its routed, feature module by using loadChildren:
+    path: 'notes',
+    loadChildren: () => import('./notes/notes.module').then( m => m.NotesPageModule)
+  },
 ];
 
 @NgModule({
