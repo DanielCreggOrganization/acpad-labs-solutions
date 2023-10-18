@@ -6,8 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
-import { doc, Firestore } from '@angular/fire/firestore';
-import { setDoc } from '@firebase/firestore';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -33,11 +32,12 @@ export class AuthService {
       return null;
     }
   }
+
   // Sign in with email/password
   async login({ email, password }: { email: string; password: string }) {
     try {
       // Sign in user. If successful, the user object is returned. Otherwise, null is returned.
-      const credentials = await signInWithEmailAndPassword( 
+      const credentials = await signInWithEmailAndPassword(
         this.auth, // <-- Injected AngularFireAuth service
         email, // <-- Email passed as parameter
         password // <-- Password passed as parameter

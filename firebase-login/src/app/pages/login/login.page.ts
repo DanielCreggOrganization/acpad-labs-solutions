@@ -47,7 +47,7 @@ export class LoginPage {
     );
     // Log the user object to the console. This will be `null` if the user was not created.
     console.log(
-      '🚀 ~ file: login.page.ts:42 ~ LoginPage ~ register ~ user',
+      '🚀 ~ file: login.page.ts:50 ~ LoginPage ~ register ~ user',
       user
     );
     // Dismiss the loading spinner
@@ -63,13 +63,17 @@ export class LoginPage {
 
   // Login an existing user with the AuthService. If successful, redirect to the home page.
   async login() {
+    // Create a loading overlay. This will be displayed while the request is running.
     const loading = await this.loadingController.create();
     await loading.present();
-
+    // Call the login method from the AuthService. This returns a user object if successful, or null if unsuccessful.
     const user = await this.authService.login(this.credentials.getRawValue());
-    console.log('🚀 ~ file: login.page.ts:60 ~ LoginPage ~ login ~ user', user);
-    await loading.dismiss();
 
+    // Log the user object to the console. This will be `null` if the user was not logged in.
+    console.log('🚀 ~ file: login.page.ts:73 ~ LoginPage ~ login ~ user', user);
+    // Dismiss the loading spinner
+    await loading.dismiss();
+    // If the user is successfully logged in, redirect to the home page. Otherwise, display an error via alert.
     if (user) {
       this.router.navigateByUrl('/home', { replaceUrl: true });
     } else {
@@ -100,6 +104,7 @@ export class LoginPage {
       header,
       message,
       buttons: ['OK'],
+
     });
     await alert.present();
   }
