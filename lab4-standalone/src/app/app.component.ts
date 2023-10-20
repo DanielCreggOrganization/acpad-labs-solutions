@@ -3,10 +3,20 @@ import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
+  template: `
+  <ion-content>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>
+          Basic Ionic Standalone App
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+  </ion-content>
+`,
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule]
 })
 export class AppComponent {
-  constructor() {}
+  constructor() { }
 }
