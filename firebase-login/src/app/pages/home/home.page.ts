@@ -12,6 +12,8 @@ export class HomePage {
 
   async logout() {
     this.authService.logout();
+    // When logout, redirect to login page. 
+    // Replace the current page in the history stack so that the user won't be able to go back to the home page after logout.
     this.router.navigateByUrl('/', { replaceUrl: true });
   }
 }
