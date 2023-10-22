@@ -10,11 +10,29 @@
 </ion-header>
 
 <ion-content>
-  <ion-modal
-    trigger="open-modal"
-    #modal
-    [presentingElement]="presentingElement"
-  >
+  <ion-list>
+    <ion-item-sliding *ngFor="let task of tasks | async">
+      <ion-item>
+        <ion-checkbox slot="start" (ionChange)="toggleTask($event, task)" [checked]="task.completed">
+        </ion-checkbox>
+        <ion-label>
+          <h3>{{task.title}}</h3>
+        </ion-label>
+
+        <ion-button slot="end" *ngIf="task.file" class="ion-text-wrap" [href]="task.file" target="_blank">
+          Download
+        </ion-button>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteTask(task)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-modal trigger="open-modal" #modal [presentingElement]="presentingElement">
     <ng-template>
       <ion-header>
         <ion-toolbar color="secondary">
@@ -28,21 +46,20 @@
       <ion-content class="ion-padding">
         <ion-item>
           <ion-label position="stacked">Task Title</ion-label>
-          <ion-input
-            type="text"
-            placeholder="The task title"
-            [(ngModel)]="newTask.title"
-          ></ion-input>
+          <ion-input type="text" placeholder="The task title" [(ngModel)]="newTask.title"></ion-input>
         </ion-item>
 
-        <ion-button expand="block" (click)="addTask()" color="primary"
-          >Save Task</ion-button
-        >
+        <ion-item>
+          <ion-label position="stacked">Upload File</ion-label>
+          <ion-input (ionChange)="addFileToTask($event)" type="file"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" (click)="addTask()" color="primary">Save Task</ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>
+  <!-- FAB = Floating Action Button -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <!-- Trigger inline modal -->
     <ion-fab-button id="open-modal">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

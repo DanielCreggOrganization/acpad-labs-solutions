@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
-  Firestore,
   addDoc,
-  CollectionReference,
   collection,
+  collectionChanges,
+  collectionData,
+  CollectionReference,
+  deleteDoc,
+  doc,
+  Firestore,
+  query,
+  updateDoc,
+  where,
 } from '@angular/fire/firestore';
-import { Storage } from '@angular/fire/storage';
+import {
+  getDownloadURL,
+  ref,
+  Storage,
+  uploadBytes,
+} from '@angular/fire/storage';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-// Create a new interface for Tasks. This will be the structure of our tasks.
 export interface Task {
-  id?: string; // The ? means that this is an optional property.
+  id?: string;
   title: string;
   completed: boolean;
   file?: string;
@@ -22,19 +34,60 @@ export interface Task {
 })
 export class TasksService {
   private collectionRef: CollectionReference;
+  private tasks: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
+  private tasksSub!: Subscription;
 
   constructor(
-    private auth: Auth,
     private firestore: Firestore,
+    private auth: Auth,
     private storage: Storage
   ) {
-    this.collectionRef = collection(firestore, 'tasks');
-  } // End of constructor
+    this.collectionRef = collection(this.firestore, 'tasks');
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        const tasksQuery = query(
+          this.collectionRef,
+          where('user', '==', user.uid)
+        );
+        const collectionSub = collectionData(tasksQuery, {
+          idField: 'id',
+        }) as Observable<Task[]>;
+        this.tasksSub = collectionSub.subscribe((tasks) => {
+          this.tasks.next(tasks);
+        });
+      } else {
+        this.tasks.next([]);
+        this.tasksSub.unsubscribe();
+      }
+    });
+  }
 
-  // Create addTask method to add a new task to the database.
   addTask(task: Task) {
-    // If the task has a file, upload it to the storage. If not, just add the task to the database.
-    // The ? means that this is an optional property.
     addDoc(this.collectionRef, { ...task, user: this.auth.currentUser?.uid });
   }
-} // End of class
+
+  getTasks() {
+    return this.tasks.asObservable();
+  }
+
+  updateTask(task: Task) {
+    const ref = doc(this.firestore, `tasks/${task.id}`);
+    return updateDoc(ref, { completed: task.completed });
+  }
+
+  deleteTask(task: Task) {
+    const ref = doc(this.firestore, `tasks/${task.id}`);
+    return deleteDoc(ref);
+  }
+
+  async uploadFile(fileToUpload: File) {
+    const storageRef = ref(
+      this.storage,
+      `files/${this.auth.currentUser?.uid}/${fileToUpload.name}`
+    );
+
+    await uploadBytes(storageRef, fileToUpload);
+
+    return getDownloadURL(storageRef);
+  }
+}
