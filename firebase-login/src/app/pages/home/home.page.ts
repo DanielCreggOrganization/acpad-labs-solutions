@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { TasksService } from 'src/app/services/tasks.service';
+import { TasksService, Task } from 'src/app/services/tasks.service';
+import { LoadingController, IonRouterOutlet, IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -9,14 +10,47 @@ import { TasksService } from 'src/app/services/tasks.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  // Exclaimation mark means that the variable will be initialized later.
+  newTask!: Task;
+  // Access the modal using the @ViewChild decorator. ViewChild is used to access a child component, directive or a DOM element.
+  @ViewChild(IonModal) modal!: IonModal;
+  presentingElement: HTMLIonRouterOutletElement;
+  //tasks = this.tasksService.getTasks();
+  fileToUpload?: File;
+
   constructor(
     private authService: AuthService,
     private router: Router,
-    private tasksService : TasksService
+    private tasksService : TasksService,
+    private loadingController: LoadingController,
+    private routerOutlet: IonRouterOutlet
   ) {
-    // Add a task when the home page is loaded. Completed flase means that the task is not completed. 
-    // This means that the task is not checked which means that the checkbox is not checked.
-    this.tasksService.addTask({title: 'My test task', completed: false});
+    this.presentingElement = this.routerOutlet.nativeEl;
+    this.resetTask();
+  }
+
+  async addTask() {
+    const loading = await this.loadingController.create();
+    await loading.present();
+
+    this.tasksService.addTask(this.newTask);
+    await loading.dismiss();
+    this.modal.dismiss(null, 'confirm');
+    this.resetTask();
+  }
+
+  // cancel the modal and reset the newTask object.
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+    this.resetTask();
+  }
+
+  // reset the newTask object to its initial state.
+  resetTask() {
+    this.newTask = {
+      title: '',
+      completed: false,
+    };
   }
 
   async logout() {
