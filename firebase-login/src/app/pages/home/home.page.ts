@@ -51,12 +51,14 @@ export class HomePage {
 
   async addTask() {
     const loading = await this.loadingController.create();
+    // await means that the code will wait for the loading to be presented before continuing
     await loading.present();
 
+    // Upload the file if there is one. If there is no file, the file property will be undefined.
     if (this.fileToUpload) {
       this.newTask.file = await this.tasksService.uploadFile(this.fileToUpload);
     }
-
+    // Add the task to the database
     this.tasksService.addTask(this.newTask);
     await loading.dismiss();
     this.modal.dismiss(null, 'confirm');
@@ -72,9 +74,11 @@ export class HomePage {
     await this.tasksService.updateTask(task);
   }
 
-  addFileToTask(ev: any) {
-    console.log(ev.target.firstChild.files);
-
-    this.fileToUpload = ev.target.firstChild.files[0];
+  addFileToTask(event: any) {
+    // Get the file from the event
+    console.log(event.target.firstChild.files);
+    // Get the file. The file is the first item in the files property
+    this.fileToUpload = event.target.firstChild.files[0];
   }
+  
 }

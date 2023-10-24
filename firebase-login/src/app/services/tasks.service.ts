@@ -71,23 +71,29 @@ export class TasksService {
   }
 
   updateTask(task: Task) {
+    // Use the task id to get the reference to the document
     const ref = doc(this.firestore, `tasks/${task.id}`);
+    // Update the document. Here we set the value of the completed field to the value of the task.completed
     return updateDoc(ref, { completed: task.completed });
   }
 
   deleteTask(task: Task) {
+    // Use the task id to get the reference to the document
     const ref = doc(this.firestore, `tasks/${task.id}`);
+    // Delete the document
     return deleteDoc(ref);
   }
 
+  // Upload a file to the cloud. Returns the download URL of the file.
   async uploadFile(fileToUpload: File) {
+    // Create a reference to the file to save
     const storageRef = ref(
       this.storage,
       `files/${this.auth.currentUser?.uid}/${fileToUpload.name}`
     );
-
+    // Upload the file to the cloud
     await uploadBytes(storageRef, fileToUpload);
-
+    // Get the download URL of the file
     return getDownloadURL(storageRef);
   }
 }
