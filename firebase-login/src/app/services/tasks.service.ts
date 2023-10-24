@@ -70,7 +70,7 @@ export class TasksService {
     return this.tasks.asObservable();
   }
 
-  updateTask(task: Task) {
+  toggleTaskCompleted(task: Task) {
     // Use the task id to get the reference to the document
     const ref = doc(this.firestore, `tasks/${task.id}`);
     // Update the document. Here we set the value of the completed field to the value of the task.completed
@@ -95,5 +95,12 @@ export class TasksService {
     await uploadBytes(storageRef, fileToUpload);
     // Get the download URL of the file
     return getDownloadURL(storageRef);
+  }
+
+  updateTaskTitle(task: Task, title: string) {
+    // Use the task id to get the reference to the document
+    const ref = doc(this.firestore, `tasks/${task.id}`);
+    // Update the document. Here we set the value of the title field to the value of the title parameter
+    return updateDoc(ref, { title });
   }
 }

@@ -34,6 +34,8 @@ export class HomePage {
 
   async logout() {
     this.authService.logout();
+    // Navigate to the login page with the replaceUrl option. 
+    // This means that the login page will replace the home page in the navigation stack.
     this.router.navigateByUrl('/', { replaceUrl: true });
   }
 
@@ -71,7 +73,7 @@ export class HomePage {
 
   async toggleTask(ionCheckboxEvent: Event, task: Task) {
     task.completed = (ionCheckboxEvent as CheckboxCustomEvent).detail.checked;
-    await this.tasksService.updateTask(task);
+    await this.tasksService.toggleTaskCompleted(task);
   }
 
   addFileToTask(event: any) {
@@ -79,6 +81,11 @@ export class HomePage {
     console.log(event.target.firstChild.files);
     // Get the file. The file is the first item in the files property
     this.fileToUpload = event.target.firstChild.files[0];
+  }
+
+  // Not used yet -- still needs work
+  updateTaskTitle(task: Task, title: string) {
+    this.tasksService.updateTaskTitle(task, title);
   }
   
 }
