@@ -33,7 +33,8 @@ export class HomePage {
   }
 
   async logout() {
-    this.authService.logout();
+    // Call the logout method in the auth service. Use await to wait for the logout to complete before continuing.
+    await this.authService.logout();
     // Navigate to the login page with the replaceUrl option. 
     // This means that the login page will replace the home page in the navigation stack.
     this.router.navigateByUrl('/', { replaceUrl: true });
