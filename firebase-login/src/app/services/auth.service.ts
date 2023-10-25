@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
-  Auth,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
+  Auth, // Used to get the current user and subscribe to the auth state.
+  createUserWithEmailAndPassword, // Used to create a user in Firebase auth.
+  sendPasswordResetEmail, // Used to send a password reset email.
+  signInWithEmailAndPassword, // Used to sign in a user with email and password.
+  signOut, // Used to sign out a user.
 } from '@angular/fire/auth';
-import { doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore'; // Used to interact with Firestore.
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root', // This service is provided in the root injector (AppModule). This means that the service will be available to the entire application.
 })
 export class AuthService {
   // Inject Firestore service. We need it to create a user profile in Firestore.
@@ -25,15 +25,15 @@ export class AuthService {
       );
       // In case the user is created successfully, create a document in `users` collection
       const ref = doc(this.firestore, `users/${credentials.user.uid}`);
-      // Set the document. Data is written to the database.
-      setDoc(ref, { email });
+      setDoc(ref, { email }); // Set the document. Data is written to the database.
       return credentials;
     } catch (e) {
+      console.log("Error in register: ", e);
       return null;
     }
   }
 
-  // Sign in with email/password
+  // Sign in with email/password. We pass the email and password as parameters.
   async login({ email, password }: { email: string; password: string }) {
     try {
       // Sign in user. If successful, the user object is returned. Otherwise, null is returned.
