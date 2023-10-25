@@ -112,5 +112,11 @@ export class HomePage {
       ],
     });
     await alert.present(); // Present the alert to the user
+    // Get the alert's first input element and focus the mouse blinker on it. 
+    // The setTimeout function is used to allow some time for the browser to render the alert's DOM elements. 
+    setTimeout(() => {
+      const firstInput: any = document.querySelector('ion-alert input');
+      firstInput.focus();
+    }, 250);
   }
 }
