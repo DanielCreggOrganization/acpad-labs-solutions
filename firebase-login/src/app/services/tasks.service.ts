@@ -3,7 +3,6 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   addDoc,
   collection,
-  collectionChanges,
   collectionData,
   CollectionReference,
   deleteDoc,
@@ -13,12 +12,6 @@ import {
   updateDoc,
   where,
 } from '@angular/fire/firestore';
-import {
-  getDownloadURL,
-  ref,
-  Storage,
-  uploadBytes,
-} from '@angular/fire/storage';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 export interface Task {
@@ -43,7 +36,6 @@ export class TasksService {
   constructor(
     private firestore: Firestore,
     private auth: Auth,
-    private storage: Storage
   ) {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
