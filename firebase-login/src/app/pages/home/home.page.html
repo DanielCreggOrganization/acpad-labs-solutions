@@ -54,22 +54,14 @@
   >
     <!-- ng-template is used to create a template that can be used in multiple places. Here we use it to create the modal -->
     <ng-template>
-      <!-- Create a header for the modal with a cancel button and the title "Enter Task" -->
-      <ion-header>
-        <ion-toolbar color="secondary">
-          <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
-          </ion-buttons>
-          <ion-title>Enter Task</ion-title>
-        </ion-toolbar>
-      </ion-header>
+  
 
       <!-- In the modal, create an input to enter a new task. Use two-way binding to bind the input to the newTask property -->
       <ion-item>
         <ion-label position="stacked">Task Title</ion-label>
         <ion-input
           type="text"
-          placeholder="The task title"
+          placeholder="Enter the task title here"
           [(ngModel)]="newTask.title"
         ></ion-input>
       </ion-item>
@@ -82,13 +74,27 @@
           ></ion-input>
         </ion-item> -->
 
-      <!-- Add a button in the modal to save the task -->
-      <ion-button 
-        expand="block" 
-        (click)="addTask()" 
-        color="primary"
-        >Save Task
-      </ion-button>
+      <!-- Add a buttons in the modal to save or cancel the task entry -->
+      <ion-row>
+        <ion-col>
+          <ion-button 
+            (click)="addTask()" 
+            color="primary"
+            expand="full"
+          >
+            Save Task
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button 
+            (click)="cancel()" 
+            color="danger"
+            expand="full"
+          >
+            Cancel
+          </ion-button>
+        </ion-col>
+      </ion-row>
     
     </ng-template>
   </ion-modal>
