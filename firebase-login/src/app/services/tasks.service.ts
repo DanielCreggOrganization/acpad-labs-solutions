@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth'; // Used to get the current user and subscribe to the auth state.
 import {
-  addDoc,
-  collection,
-  collectionData,
-  CollectionReference,
-  deleteDoc,
-  doc,
-  Firestore,
-  query,
-  updateDoc,
-  where,
-} from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+  addDoc, // Used to add a document to Firestore.
+  collection, // Used to create a reference to a collection in Firestore.
+  collectionData, // Used to create an observable that will emit the current value of the tasks array.
+  CollectionReference, // Used to create a reference to a collection in Firestore.
+  deleteDoc, // Used to delete a document in Firestore.
+  doc, // Used to get a reference to a document in Firestore.
+  Firestore, // Used to interact with Firestore.
+  query, // Used to create a query to get the tasks for the current user.
+  updateDoc, // Used to update a document in Firestore.
+  where, // Used to create a query to get the tasks for the current user.
+} from '@angular/fire/firestore'; // Import the functions needed to interact with Firestore.
+import { BehaviorSubject, Observable, Subscription } from 'rxjs'; // Used to create an observable that will emit the current value of the tasks array.
 
+// Task is an interface that defines the structure of a task. The ? after the property name means that the property is optional.
 export interface Task {
   id?: string;
   content: string;
@@ -21,7 +22,9 @@ export interface Task {
   file?: string;
   user?: string;
 }
-
+// The @Injectable decorator is used to make the service injectable. The service is injected into the constructor.
+// The providedIn option is used to specify that the service should be provided in the root injector (AppModule). 
+// This means that the service will be available to the entire application.
 @Injectable({
   providedIn: 'root',
 })
@@ -34,8 +37,8 @@ export class TasksService {
   private tasksSub!: Subscription;
 
   constructor(
-    private firestore: Firestore,
-    private auth: Auth,
+    private firestore: Firestore, // Inject the Firestore service.
+    private auth: Auth, // Inject the Auth service.
   ) {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
