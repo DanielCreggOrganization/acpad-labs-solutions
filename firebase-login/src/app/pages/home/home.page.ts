@@ -7,8 +7,8 @@ import {
   IonModal,
   IonRouterOutlet,
   LoadingController,
+  AlertController,
 } from '@ionic/angular';
-import { doc, updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-home',
@@ -16,18 +16,18 @@ import { doc, updateDoc } from 'firebase/firestore';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  newTask!: Task;
-  @ViewChild(IonModal) modal!: IonModal;
-  presentingElement: HTMLIonRouterOutletElement;
-  tasks = this.tasksService.readTasks();
-  fileToUpload?: File;
+  newTask!: Task; // This is the task that will be added to the database.
+  @ViewChild(IonModal) modal!: IonModal; // This is a reference to the modal in the HTML.
+  presentingElement: HTMLIonRouterOutletElement; // This is a reference to the router outlet in the HTML.
+  tasks = this.tasksService.readTasks(); // This is an observable that will emit the current value of the tasks array.
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private tasksService: TasksService,
     private loadingController: LoadingController,
-    private routerOutlet: IonRouterOutlet
+    private routerOutlet: IonRouterOutlet,
+    private alertController: AlertController
   ) {
     this.presentingElement = routerOutlet.nativeEl;
     this.resetTask();
@@ -36,7 +36,7 @@ export class HomePage {
   async logout() {
     // Call the logout method in the auth service. Use await to wait for the logout to complete before continuing.
     await this.authService.logout();
-    // Navigate to the login page with the replaceUrl option. 
+    // Navigate to the login page with the replaceUrl option.
     // This means that the login page will replace the home page in the navigation stack.
     this.router.navigateByUrl('/', { replaceUrl: true });
   }
@@ -58,7 +58,6 @@ export class HomePage {
     const loading = await this.loadingController.create();
     // await means that the code will wait for the loading to be presented before continuing
     await loading.present();
-
     // Add the task to the database
     this.tasksService.createTask(this.newTask);
     // Dismiss the loading
@@ -69,28 +68,49 @@ export class HomePage {
     this.resetTask();
   }
 
-  deleteTask(task: Task) {
-    // Print task to console
-    console.log("Deleting task: ", task);
-    this.tasksService.deleteTask(task);
-  }
-
   // This method is used to update the checkbox in the UI when the user toggles the checkbox
   async toggleTask(ionCheckboxEvent: Event, task: Task) {
     task.completed = (ionCheckboxEvent as CheckboxCustomEvent).detail.checked;
     await this.tasksService.toggleTaskCompleted(task);
   }
 
-  async openUpdateModal(task: Task) {
-    this.newTask = { ...task }; // copy the task to newTask
-    // open the modal
-    await this.modal.present();
-  }
-
   async updateTask() {
     await this.tasksService.updateTask(this.newTask);
-    await this.modal.dismiss();
     this.resetTask();
   }
 
+  deleteTask(task: Task) {
+    // Print task to console
+    console.log('Deleting task: ', task);
+    this.tasksService.deleteTask(task);
+  }
+
+  async openUpdateInput(task: Task) {
+    const alert = await this.alertController.create({
+      header: 'Update Task',
+      inputs: [
+        {
+          name: 'Task',
+          type: 'text',
+          placeholder: 'Task content',
+          value: task.content,
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Update',
+          // Call the updateTask method when the user clicks the update button
+          handler: (data) => {
+            task.content = data.Task;
+            this.tasksService.updateTask(task);
+          },
+        },
+      ],
+    });
+    await alert.present(); // Present the alert to the user
+  }
 }

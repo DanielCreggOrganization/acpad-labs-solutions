@@ -71,7 +71,7 @@ export class TasksService {
     });
   }
 
-  // Create a task in the tasks collection. This will add a document to the collection on Firestore.
+  // Create a task and add it to the tasks collection. This will add a document to the collection on Firestore.
   async createTask(task: Task) {
     addDoc(this.collectionRef, { ...task, user: this.auth.currentUser?.uid });
   }
