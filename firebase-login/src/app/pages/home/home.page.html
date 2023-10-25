@@ -1,3 +1,4 @@
+<!-- Add a header to the page with a logout button and the title "My Tasks" -->
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
@@ -17,12 +18,15 @@
           slot="end"
           (ionChange)="toggleTask($event, task)"
           [checked]="task.completed"
+          aria-label="Task checkbox"
         >
         </ion-checkbox>
+        <!-- Display the task title-->
         <ion-label>
           <h3>{{task.title}}</h3>
         </ion-label>
 
+        <!--  Create a button to download the file -->
         <ion-button
           slot="end"
           *ngIf="task.file"
@@ -33,7 +37,7 @@
           Download
         </ion-button>
       </ion-item>
-
+      <!-- Create a sliding button to delete the task -->
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="deleteTask(task)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
@@ -42,49 +46,59 @@
     </ion-item-sliding>
   </ion-list>
 
+  <!-- Create a pop up modal to add a new task. Trigger the modal with FAB button created below. -->
   <ion-modal
     trigger="open-modal"
     #modal
     [presentingElement]="presentingElement"
   >
+    <!-- ng-template is used to create a template that can be used in multiple places. Here we use it to create the modal -->
     <ng-template>
+      <!-- Create a header for the modal with a cancel button and the title "Enter Task" -->
       <ion-header>
         <ion-toolbar color="secondary">
           <ion-buttons slot="start">
             <ion-button (click)="cancel()">Cancel</ion-button>
           </ion-buttons>
-          <ion-title>New Task</ion-title>
+          <ion-title>Enter Task</ion-title>
         </ion-toolbar>
       </ion-header>
 
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-label position="stacked">Task Title</ion-label>
-          <ion-input
-            type="text"
-            placeholder="The task title"
-            [(ngModel)]="newTask.title"
-          ></ion-input>
-        </ion-item>
+      <!-- In the modal, create an input to enter a new task. Use two-way binding to bind the input to the newTask property -->
+      <ion-item>
+        <ion-label position="stacked">Task Title</ion-label>
+        <ion-input
+          type="text"
+          placeholder="The task title"
+          [(ngModel)]="newTask.title"
+        ></ion-input>
+      </ion-item>
 
-        <ion-item>
+      <!-- <ion-item>
           <ion-label position="stacked">Upload File</ion-label>
           <ion-input
             (ionChange)="addFileToTask($event)"
             type="file"
           ></ion-input>
-        </ion-item>
+        </ion-item> -->
 
-        <ion-button expand="block" (click)="addTask()" color="primary"
-          >Save Task</ion-button
-        >
-      </ion-content>
+      <!-- Add a button in the modal to save the task -->
+      <ion-button 
+        expand="block" 
+        (click)="addTask()" 
+        color="primary"
+        >Save Task
+      </ion-button>
+    
     </ng-template>
   </ion-modal>
-  <!-- FAB = Floating Action Button -->
+
+  <!-- FAB = Floating Action Button. This creates a button that is always visible on the screen.
+       The button contains a plus symbol and is used to add a new task -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button id="open-modal">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>

@@ -33,8 +33,11 @@ export interface Task {
   providedIn: 'root',
 })
 export class TasksService {
+  // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
   private collectionRef: CollectionReference;
+  // Create a BehaviorSubject to store the tasks. This is an observable that will emit the current value of the tasks array.
   private tasks: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
+  // Create a subscription to the tasks collection. This is a subscription to the collection in Firestore.
   private tasksSub!: Subscription;
 
   constructor(
@@ -42,20 +45,26 @@ export class TasksService {
     private auth: Auth,
     private storage: Storage
   ) {
+    // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
+    // Subscribe to the auth state. This will run whenever the user logs in or out.
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
+        // Create a query to get the tasks for the current user.
         const tasksQuery = query(
           this.collectionRef,
           where('user', '==', user.uid)
         );
+        // Subscribe to the tasks collection. This will run whenever the tasks collection changes.
         const collectionSub = collectionData(tasksQuery, {
           idField: 'id',
         }) as Observable<Task[]>;
+        // Update the tasks BehaviorSubject with the new tasks.
         this.tasksSub = collectionSub.subscribe((tasks) => {
           this.tasks.next(tasks);
         });
       } else {
+        // If there is no user, unsubscribe from the tasks collection and clear the tasks BehaviorSubject.
         this.tasks.next([]);
         this.tasksSub.unsubscribe();
       }
@@ -63,44 +72,31 @@ export class TasksService {
   }
 
   addTask(task: Task) {
+    // Add the task to the tasks collection. The user property is set to the current user's uid.
     addDoc(this.collectionRef, { ...task, user: this.auth.currentUser?.uid });
   }
 
+  // Return the tasks BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
   getTasks() {
     return this.tasks.asObservable();
   }
 
-  toggleTaskCompleted(task: Task) {
+  async toggleTaskCompleted(task: Task) {
     // Use the task id to get the reference to the document
     const ref = doc(this.firestore, `tasks/${task.id}`);
     // Update the document. Here we set the value of the completed field to the value of the task.completed
     return updateDoc(ref, { completed: task.completed });
   }
 
-  deleteTask(task: Task) {
-    // Use the task id to get the reference to the document
-    const ref = doc(this.firestore, `tasks/${task.id}`);
-    // Delete the document
-    return deleteDoc(ref);
-  }
-
-  // Upload a file to the cloud. Returns the download URL of the file.
-  async uploadFile(fileToUpload: File) {
-    // Create a reference to the file to save
-    const storageRef = ref(
-      this.storage,
-      `files/${this.auth.currentUser?.uid}/${fileToUpload.name}`
-    );
-    // Upload the file to the cloud
-    await uploadBytes(storageRef, fileToUpload);
-    // Get the download URL of the file
-    return getDownloadURL(storageRef);
-  }
-
-  updateTaskTitle(task: Task, title: string) {
-    // Use the task id to get the reference to the document
-    const ref = doc(this.firestore, `tasks/${task.id}`);
-    // Update the document. Here we set the value of the title field to the value of the title parameter
-    return updateDoc(ref, { title });
+  async deleteTask(task: Task) {
+    try {
+      // Use the task id to get the reference to the document
+      const ref = doc(this.firestore, `tasks/${task.id}`);
+      // Delete the document
+      await deleteDoc(ref);
+    } catch (error) {
+      // Log the error to the console
+      console.error('Error deleting document: ', error);
+    }
   }
 }
