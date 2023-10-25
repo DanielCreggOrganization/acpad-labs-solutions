@@ -14,6 +14,11 @@
   <ion-list>
     <ion-item-sliding *ngFor="let task of tasks | async">
       <ion-item>
+        <!-- Display the task title-->
+        <ion-label>
+          <h3>{{task.content}}</h3>
+        </ion-label>
+        <!-- Display a checkbox to mark the task as completed. Use two-way binding to bind the checkbox to the completed property -->
         <ion-checkbox
           slot="end"
           (ionChange)="toggleTask($event, task)"
@@ -21,24 +26,12 @@
           aria-label="Task checkbox"
         >
         </ion-checkbox>
-        <!-- Display the task title-->
-        <ion-label>
-          <h3>{{task.title}}</h3>
-        </ion-label>
-
-        <!--  Create a button to download the file -->
-        <ion-button
-          slot="end"
-          *ngIf="task.file"
-          class="ion-text-wrap"
-          [href]="task.file"
-          target="_blank"
-        >
-          Download
-        </ion-button>
       </ion-item>
-      <!-- Create a sliding button to delete the task -->
+      <!-- Create a sliding button to edit the task title or delete the task -->
       <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="openUpdateModal(task)">
+          <ion-icon name="pencil-outline"  slot="icon-only"></ion-icon>
+        </ion-item-option>
         <ion-item-option color="danger" (click)="deleteTask(task)">
           <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
         </ion-item-option>
@@ -54,48 +47,32 @@
   >
     <!-- ng-template is used to create a template that can be used in multiple places. Here we use it to create the modal -->
     <ng-template>
-  
-
       <!-- In the modal, create an input to enter a new task. Use two-way binding to bind the input to the newTask property -->
       <ion-item>
-        <ion-label position="stacked">Task Title</ion-label>
+        <ion-label position="stacked">Task</ion-label>
         <ion-input
           type="text"
-          placeholder="Enter the task title here"
-          [(ngModel)]="newTask.title"
+          placeholder="Enter task content here..."
+          [(ngModel)]="newTask.content"
         ></ion-input>
       </ion-item>
-
-      <!-- <ion-item>
-          <ion-label position="stacked">Upload File</ion-label>
-          <ion-input
-            (ionChange)="addFileToTask($event)"
-            type="file"
-          ></ion-input>
-        </ion-item> -->
 
       <!-- Add a buttons in the modal to save or cancel the task entry -->
       <ion-row>
         <ion-col>
-          <ion-button 
-            (click)="addTask()" 
-            color="primary"
-            expand="full"
-          >
-            Save Task
+          <ion-button (click)="addTask()" color="primary" expand="full">
+            Save
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button 
-            (click)="cancel()" 
-            color="danger"
-            expand="full"
-          >
+          <ion-button (click)="cancel()" color="danger" expand="full">
             Cancel
           </ion-button>
         </ion-col>
       </ion-row>
-    
+      <ion-button expand="block" (click)="updateTask()" color="primary">
+        Update Task
+      </ion-button>
     </ng-template>
   </ion-modal>
 
@@ -106,5 +83,4 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
 </ion-content>

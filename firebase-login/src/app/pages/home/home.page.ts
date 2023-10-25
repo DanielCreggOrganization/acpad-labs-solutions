@@ -8,6 +8,7 @@ import {
   IonRouterOutlet,
   LoadingController,
 } from '@ionic/angular';
+import { doc, updateDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ export class HomePage {
   newTask!: Task;
   @ViewChild(IonModal) modal!: IonModal;
   presentingElement: HTMLIonRouterOutletElement;
-  tasks = this.tasksService.getTasks();
+  tasks = this.tasksService.readTasks();
   fileToUpload?: File;
 
   constructor(
@@ -47,7 +48,7 @@ export class HomePage {
 
   resetTask() {
     this.newTask = {
-      title: '',
+      content: '',
       completed: false,
     };
   }
@@ -57,8 +58,9 @@ export class HomePage {
     const loading = await this.loadingController.create();
     // await means that the code will wait for the loading to be presented before continuing
     await loading.present();
+
     // Add the task to the database
-    this.tasksService.addTask(this.newTask);
+    this.tasksService.createTask(this.newTask);
     // Dismiss the loading
     await loading.dismiss();
     // Dismiss the modal
@@ -77,6 +79,18 @@ export class HomePage {
   async toggleTask(ionCheckboxEvent: Event, task: Task) {
     task.completed = (ionCheckboxEvent as CheckboxCustomEvent).detail.checked;
     await this.tasksService.toggleTaskCompleted(task);
+  }
+
+  async openUpdateModal(task: Task) {
+    this.newTask = { ...task }; // copy the task to newTask
+    // open the modal
+    await this.modal.present();
+  }
+
+  async updateTask() {
+    await this.tasksService.updateTask(this.newTask);
+    await this.modal.dismiss();
+    this.resetTask();
   }
 
 }

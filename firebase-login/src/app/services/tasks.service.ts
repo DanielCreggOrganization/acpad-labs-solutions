@@ -23,7 +23,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 export interface Task {
   id?: string;
-  title: string;
+  content: string;
   completed: boolean;
   file?: string;
   user?: string;
@@ -71,21 +71,21 @@ export class TasksService {
     });
   }
 
-  addTask(task: Task) {
-    // Add the task to the tasks collection. The user property is set to the current user's uid.
+  // Create a task in the tasks collection. This will add a document to the collection on Firestore.
+  async createTask(task: Task) {
     addDoc(this.collectionRef, { ...task, user: this.auth.currentUser?.uid });
   }
 
   // Return the tasks BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
-  getTasks() {
+  readTasks() {
     return this.tasks.asObservable();
   }
 
-  async toggleTaskCompleted(task: Task) {
+  updateTask(task: Task) {
     // Use the task id to get the reference to the document
     const ref = doc(this.firestore, `tasks/${task.id}`);
-    // Update the document. Here we set the value of the completed field to the value of the task.completed
-    return updateDoc(ref, { completed: task.completed });
+    // Update the document. Here we set the value of the content field to the value of the task.content
+    return updateDoc(ref, { content: task.content });
   }
 
   async deleteTask(task: Task) {
@@ -99,4 +99,13 @@ export class TasksService {
       console.error('Error deleting document: ', error);
     }
   }
+
+  // This method is used update the checkbox in the Firestore database when the user toggles the checkbox in the UI.
+  async toggleTaskCompleted(task: Task) {
+    // Use the task id to get the reference to the document
+    const ref = doc(this.firestore, `tasks/${task.id}`);
+    // Update the document. Here we set the value of the completed field to the value of the task.completed
+    return updateDoc(ref, { completed: task.completed });
+  }
+
 }
