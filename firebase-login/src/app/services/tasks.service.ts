@@ -42,6 +42,7 @@ export class TasksService {
   ) {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
+    
     // Subscribe to the auth state. This will run whenever the user logs in or out.
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
@@ -50,7 +51,10 @@ export class TasksService {
           this.collectionRef,
           where('user', '==', user.uid)
         );
-        // Subscribe to the tasks collection. This will run whenever the tasks collection changes.
+        // Subscribe to the tasks collection. This will run whenever the tasks collection changes. 
+        // CollectionData returns an observable that will emit the current value of the tasks array.
+        //  The idField option is used to specify the name of the field that will be used as the id. 
+        // This is needed because Firestore does not store the id in the document.
         const collectionSub = collectionData(tasksQuery, {
           idField: 'id',
         }) as Observable<Task[]>;
