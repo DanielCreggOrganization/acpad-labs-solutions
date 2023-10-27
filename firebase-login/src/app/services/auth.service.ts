@@ -44,6 +44,7 @@ export class AuthService {
       );
       return credentials; // <-- Return the user object
     } catch (e) {
+      console.log("Error in register: ", e);
       return null;
     }
   }

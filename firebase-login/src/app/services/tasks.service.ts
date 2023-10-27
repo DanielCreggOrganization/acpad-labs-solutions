@@ -16,7 +16,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs'; // Used to cre
 
 // Task is an interface that defines the structure of a task. The ? after the property name means that the property is optional.
 export interface Task {
-  id?: string;
+  id?: string; // The id is optional because Firestore does not store the id in the document.
   content: string;
   completed: boolean;
   file?: string;
