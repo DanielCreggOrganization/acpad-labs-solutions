@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword, // Used to sign in a user with email and password.
   signOut, // Used to sign out a user.
 } from '@angular/fire/auth';
-import { doc, Firestore, setDoc } from '@angular/fire/firestore'; // Used to interact with Firestore.
+import { doc, Firestore, setDoc } from '@angular/fire/firestore'; // Used to interact with Firestore databse. We store user info in Firestore.
 
 @Injectable({
   providedIn: 'root', // This service is provided in the root injector (AppModule). This means that the service will be available to the entire application.
