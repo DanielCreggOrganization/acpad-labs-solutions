@@ -48,14 +48,10 @@
 
   <!-- Create a pop up modal to add a new task. Trigger the modal with FAB button created below. -->
   <!-- #modal is used to access the modal in the template -->
-  <ion-modal
-    trigger="open-modal"
-    #modal
-  >
-    <!-- ng-template is used with the ViewChild decorator to create a template reference variable, which is then used to present the modal. 
-          The ViewChild decorator is used to access the modal in the component class. 
-          The #modal variable is used to access the modal in the template.
-        -->
+  <ion-modal trigger="open-modal" #modal>
+    <!-- ng-template is used with the ViewChild decorator to create a template reference variable, 
+         which is then used to present the modal. The ViewChild decorator is used to access the modal
+         in the component class. The #modal variable is used to access the modal in the template.-->
     <ng-template>
       <!-- In the modal, create an input to enter a new task. Use two-way binding to bind the input to the newTask property -->
       <ion-item>
