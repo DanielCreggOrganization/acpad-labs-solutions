@@ -31,7 +31,7 @@ export interface Task {
 export class TasksService {
   // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
   private collectionRef: CollectionReference;
-  // Create a BehaviorSubject to store the tasks. This is an observable that will emit the current value of the tasks array.
+  // Create a BehaviorSubject observable to store the tasks. This will emit the current value of the tasks array.
   private tasks: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
   // Create a subscription to the tasks collection. This is a subscription to the collection in Firestore.
   private tasksSub!: Subscription;
@@ -43,7 +43,7 @@ export class TasksService {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
 
-    // Subscribe to the auth state.
+    // Subscribe to the auth state. This will allow us to subscribe to the tasks collection when the user logs in.
     this.subscribeToAuthState();
   }
 
