@@ -33,6 +33,7 @@ export class HomePage {
     this.resetTask();
   }
 
+  // This method is used to log the user out. The button will be found in the top right corner of the home page.
   async logout() {
     // Call the logout method in the auth service. Use await to wait for the logout to complete before continuing.
     await this.authService.logout();
