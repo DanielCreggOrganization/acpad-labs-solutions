@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { TasksService, Task } from '../../services/tasks.service';
@@ -14,7 +14,7 @@ import {
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
   newTask!: Task; // This is the task that will be added to the database.
   @ViewChild(IonModal) modal!: IonModal; // This is a reference to the modal in the HTML.
   tasks = this.tasksService.readTasks(); // This is an observable that will emit the current value of the tasks array.
@@ -29,6 +29,18 @@ export class HomePage {
     this.resetTask(); // Initialize the newTask property.
   }
 
+  // This method is used to focus the cursor in the input box of the modal when we open it. We subscribe to
+  // the ionModalDidPresent event of the modal. When the modal is presented, we use setTimeout to wait for
+  // the browser to render the modal's DOM elements, then we select the first input element in the modal and focus on it.
+  ngAfterViewInit() {
+    this.modal.ionModalDidPresent.subscribe(() => {
+      setTimeout(() => {
+        const firstInput: any = document.querySelector('ion-modal input');
+        firstInput.focus();
+      }, 250);
+    });
+  }
+
   // This method is used to log the user out. The button will be found in the top right corner of the home page.
   async logout() {
     // Call the logout method in the auth service. Use await to wait for the logout to complete before continuing.
@@ -38,11 +50,13 @@ export class HomePage {
     this.router.navigateByUrl('/', { replaceUrl: true });
   }
 
+  // The method is used inside the modal to close the modal and reset the newTask property.
   cancel() {
     this.modal.dismiss(null, 'cancel');
     this.resetTask();
   }
-
+ 
+  // This method is used to reset the newTask property. This will clear the input in the modal.
   resetTask() {
     this.newTask = {
       content: '',
@@ -76,12 +90,6 @@ export class HomePage {
     this.resetTask();
   }
 
-  deleteTask(task: Task) {
-    // Print task to console
-    console.log('Deleting task: ', task);
-    this.tasksService.deleteTask(task);
-  }
-
   async openUpdateInput(task: Task) {
     const alert = await this.alertController.create({
       header: 'Update Task',
@@ -109,11 +117,17 @@ export class HomePage {
       ],
     });
     await alert.present(); // Present the alert to the user
-    // Get the alert's first input element and focus the mouse blinker on it. 
-    // The setTimeout function is used to allow some time for the browser to render the alert's DOM elements. 
+    // Get the alert's first input element and focus the mouse blinker on it.
+    // The setTimeout function is used to allow some time for the browser to render the alert's DOM elements.
     setTimeout(() => {
       const firstInput: any = document.querySelector('ion-alert input');
       firstInput.focus();
     }, 250);
+  }
+
+  deleteTask(task: Task) {
+    // Print task to console
+    console.log('Deleting task: ', task);
+    this.tasksService.deleteTask(task);
   }
 }
