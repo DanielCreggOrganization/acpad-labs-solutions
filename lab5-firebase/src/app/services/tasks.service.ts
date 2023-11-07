@@ -23,7 +23,7 @@ export interface Task {
   user?: string;
 }
 // The @Injectable decorator is used to make the service injectable. The service is injected into the constructor.
-// The providedIn option is used to specify that the service should be provided in the root injector (AppModule). 
+// The providedIn option is used to specify that the service should be provided in the root injector (AppModule).
 // This means that the service will be available to the entire application.
 @Injectable({
   providedIn: 'root',
@@ -38,11 +38,11 @@ export class TasksService {
 
   constructor(
     private firestore: Firestore, // Inject the Firestore service.
-    private auth: Auth, // Inject the Auth service.
+    private auth: Auth // Inject the Auth service.
   ) {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
-    
+
     // Subscribe to the auth state. This will run whenever the user logs in or out.
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
@@ -51,9 +51,9 @@ export class TasksService {
           this.collectionRef,
           where('user', '==', user.uid)
         );
-        // Subscribe to the tasks collection. This will run whenever the tasks collection changes. 
+        // Subscribe to the tasks collection. This will run whenever the tasks collection changes.
         // CollectionData returns an observable that will emit the current value of the tasks array.
-        //  The idField option is used to specify the name of the field that will be used as the id. 
+        //  The idField option is used to specify the name of the field that will be used as the id.
         // This is needed because Firestore does not store the id in the document.
         const collectionSub = collectionData(tasksQuery, {
           idField: 'id',
@@ -72,10 +72,18 @@ export class TasksService {
 
   // Create a task and add it to the tasks collection. This will add a document to the collection on Firestore.
   async createTask(task: Task) {
-    addDoc(this.collectionRef, { ...task, user: this.auth.currentUser?.uid });
+    try {
+      await addDoc(this.collectionRef, {
+        ...task,
+        user: this.auth.currentUser?.uid,
+      });
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
   }
 
   // Return the tasks BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
+  // The async keyword is not needed here because this method is not dealing with Promises
   readTasks() {
     return this.tasks.asObservable();
   }
@@ -101,10 +109,13 @@ export class TasksService {
 
   // This method is used update the checkbox in the Firestore database when the user toggles the checkbox in the UI.
   async toggleTaskCompleted(task: Task) {
-    // Use the task id to get the reference to the document
-    const ref = doc(this.firestore, `tasks/${task.id}`);
-    // Update the document. Here we set the value of the completed field to the value of the task.completed
-    return updateDoc(ref, { completed: task.completed });
+    try {
+      // Use the task id to get the reference to the document
+      const ref = doc(this.firestore, `tasks/${task.id}`);
+      // Update the document. Here we set the value of the completed field to the value of the task.completed
+      return updateDoc(ref, { completed: task.completed });
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
   }
-
 }
