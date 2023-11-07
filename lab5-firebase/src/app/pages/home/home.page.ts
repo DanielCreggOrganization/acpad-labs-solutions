@@ -5,7 +5,6 @@ import { TasksService, Task } from '../../services/tasks.service';
 import {
   CheckboxCustomEvent,
   IonModal,
-  IonRouterOutlet,
   LoadingController,
   AlertController,
 } from '@ionic/angular';
@@ -25,10 +24,9 @@ export class HomePage {
     private router: Router,
     private tasksService: TasksService,
     private loadingController: LoadingController,
-    private routerOutlet: IonRouterOutlet,
     private alertController: AlertController
   ) {
-    this.resetTask();
+    this.resetTask(); // Initialize the newTask property.
   }
 
   // This method is used to log the user out. The button will be found in the top right corner of the home page.
