@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {
-  redirectUnauthorizedTo,
-  redirectLoggedInTo,
-  canActivate,
+  redirectUnauthorizedTo, // Used to redirect to login screen if user is not logged in.
+  redirectLoggedInTo, // Used to redirect to home screen if user is already logged in.
+  canActivate, // Used to protect routes by checking if user is logged in.
 } from '@angular/fire/auth-guard';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
