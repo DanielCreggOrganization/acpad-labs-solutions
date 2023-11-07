@@ -18,7 +18,6 @@ import {
 export class HomePage {
   newTask!: Task; // This is the task that will be added to the database.
   @ViewChild(IonModal) modal!: IonModal; // This is a reference to the modal in the HTML.
-  presentingElement: HTMLIonRouterOutletElement; // This is a reference to the router outlet in the HTML.
   tasks = this.tasksService.readTasks(); // This is an observable that will emit the current value of the tasks array.
 
   constructor(
@@ -29,7 +28,6 @@ export class HomePage {
     private routerOutlet: IonRouterOutlet,
     private alertController: AlertController
   ) {
-    this.presentingElement = routerOutlet.nativeEl;
     this.resetTask();
   }
 
