@@ -43,31 +43,49 @@ export class TasksService {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
 
-    // Subscribe to the auth state. This will run whenever the user logs in or out.
+    // Subscribe to the auth state.
+    this.subscribeToAuthState();
+  }
+
+  /**
+   * Subscribes to the authentication state of the application.
+   * This method is called when the authentication state changes (i.e., when a user logs in or out).
+   * If a user is logged in, it subscribes to the tasks of the logged-in user by calling `subscribeToTasks`.
+   * If no user is logged in, it unsubscribes from the tasks by calling `unsubscribeFromTasks`.
+   */
+  private subscribeToAuthState(): void {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        // Create a query to get the tasks for the current user.
-        const tasksQuery = query(
-          this.collectionRef,
-          where('user', '==', user.uid)
-        );
-        // Subscribe to the tasks collection. This will run whenever the tasks collection changes.
-        // CollectionData returns an observable that will emit the current value of the tasks array.
-        //  The idField option is used to specify the name of the field that will be used as the id.
-        // This is needed because Firestore does not store the id in the document.
-        const collectionSub = collectionData(tasksQuery, {
-          idField: 'id',
-        }) as Observable<Task[]>;
-        // Update the tasks BehaviorSubject with the new tasks.
-        this.tasksSub = collectionSub.subscribe((tasks) => {
-          this.tasks.next(tasks);
-        });
+        // If a user is logged in, subscribe to their tasks.
+        this.subscribeToTasks(user.uid);
       } else {
-        // If there is no user, unsubscribe from the tasks collection and clear the tasks BehaviorSubject.
-        this.tasks.next([]);
-        this.tasksSub.unsubscribe();
+        // If no user is logged in, unsubscribe from tasks.
+        this.unsubscribeFromTasks();
       }
     });
+  }
+
+  private subscribeToTasks(userId: string): void {
+    // Create a query to get the tasks for the current user.
+    const tasksQuery = query(this.collectionRef, where('user', '==', userId));
+
+    // Subscribe to the tasks collection.
+    const collectionSub = collectionData(tasksQuery, {
+      idField: 'id',
+    }) as Observable<Task[]>;
+
+    // Update the tasks BehaviorSubject with the new tasks.
+    this.tasksSub = collectionSub.subscribe((tasks) => {
+      this.tasks.next(tasks);
+    });
+  }
+
+  private unsubscribeFromTasks(): void {
+    // If there is no user, unsubscribe from the tasks collection and clear the tasks BehaviorSubject.
+    this.tasks.next([]);
+    if (this.tasksSub) {
+      this.tasksSub.unsubscribe();
+    }
   }
 
   // Create a task and add it to the tasks collection. This will add a document to the collection on Firestore.
