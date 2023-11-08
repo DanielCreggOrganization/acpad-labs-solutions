@@ -45,11 +45,18 @@ export class PhotoService {
 
   public async addNewToGallery() {
     // Take a photo
-    const capturedPhoto = await Camera.getPhoto({
-      resultType: CameraResultType.Uri, // file-based data; provides best performance
-      source: CameraSource.Camera, // automatically take a new photo with the camera
-      quality: 100, // highest quality (0 to 100)
-    });
+    let capturedPhoto;
+    if (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android') {
+      // Running in a native environment
+      capturedPhoto = await Camera.getPhoto({
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera,
+        quality: 100,
+      });
+    } else {
+      // Running in a web environment
+      capturedPhoto = await this.getPhotoWithWebAPI();
+    }
 
     const savedImageFile = await this.savePicture(capturedPhoto);
 
@@ -61,6 +68,47 @@ export class PhotoService {
     Preferences.set({
       key: this.PHOTO_STORAGE,
       value: JSON.stringify(this.photos),
+    });
+  }
+
+  private async getPhotoWithWebAPI(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        reject('Camera API not available');
+      } else {
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            // Create a video element and start playing the video stream
+            let video = document.createElement('video');
+            video.srcObject = stream;
+            video.play();
+  
+            // Wait for the video to be ready
+            video.onloadedmetadata = () => {
+              // Create a canvas and draw the current frame of the video onto it
+              let canvas = document.createElement('canvas');
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              canvas.getContext('2d')!.drawImage(video, 0, 0);
+  
+              // Get the image data from the canvas
+              let imageData = canvas.toDataURL('image/png');
+  
+              // Stop the video stream
+              video.pause();
+              stream.getTracks().forEach(track => track.stop());
+  
+              // Resolve the promise with the image data
+              resolve({
+                webPath: imageData,
+                format: 'jpeg'
+              });
+            };
+          })
+          .catch(err => {
+            reject(err);
+          });
+      }
     });
   }
 
