@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
@@ -14,10 +19,8 @@ export class PhotoService {
   // Constant variable that will act as the key for the store
   private PHOTO_STORAGE: string = 'photos';
 
-
   constructor(private platform: Platform) {}
 
-  
   // Retrieve photo array data. We use the same key to retrieve the photos array in JSON format, then parse it into an array:
   public async loadSaved() {
     // Retrieve cached photo array data
@@ -53,13 +56,12 @@ export class PhotoService {
     // Add new photo to Photos array
     this.photos.unshift(savedImageFile);
 
-    // Cache all photo data for future retrieval. Photos array is stored each time a new photo is taken. 
+    // Cache all photo data for future retrieval. Photos array is stored each time a new photo is taken.
     // This way, it doesn’t matter when the app user closes or switches to a different app - all photo data is saved.
     Preferences.set({
       key: this.PHOTO_STORAGE,
       value: JSON.stringify(this.photos),
     });
-
   }
 
   // Save picture to file on device
@@ -112,35 +114,33 @@ export class PhotoService {
   }
 
   convertBlobToBase64 = (blob: Blob) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      resolve(reader.result);
-    };
-    reader.readAsDataURL(blob);
-  });
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    });
 
   public async deletePicture(photo: UserPhoto, position: number) {
     // Remove this photo from the Photos reference data array
     this.photos.splice(position, 1);
-  
+
     // Update photos array cache by overwriting the existing photo array
     Preferences.set({
       key: this.PHOTO_STORAGE,
-      value: JSON.stringify(this.photos)
+      value: JSON.stringify(this.photos),
     });
-  
+
     // delete photo file from filesystem
-    const filename = photo.filepath
-                        .substr(photo.filepath.lastIndexOf('/') + 1);
-  
+    const filename = photo.filepath.substring(photo.filepath.lastIndexOf('/') + 1);
+
     await Filesystem.deleteFile({
       path: filename,
-      directory: Directory.Data
+      directory: Directory.Data,
     });
   }
-
 }
 
 // Used to store the photo metadata
