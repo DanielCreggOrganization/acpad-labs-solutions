@@ -14,10 +14,17 @@ export class Tab2Page {
   ) {}
 
   async ngOnInit() {
+    // Load saved photos when user click on tab 2
     await this.photoService.loadSaved();
   }
 
+  addPhotoToGallery() {
+    this.photoService.addNewToGallery();
+  }
+
+  // Method to show an action sheet with options for a photo
   public async showActionSheet(photo: UserPhoto, position: number) {
+    // Create the action sheet
     const actionSheet = await this.actionSheetController.create({
       header: 'Photos',
       buttons: [
@@ -26,6 +33,7 @@ export class Tab2Page {
           role: 'destructive',
           icon: 'trash',
           handler: () => {
+            // Delete the photo when the "Delete" button is clicked
             this.photoService.deletePicture(photo, position);
           },
         },
@@ -34,15 +42,12 @@ export class Tab2Page {
           icon: 'close',
           role: 'cancel',
           handler: () => {
-            // Nothing to do, action sheet is automatically closed
+            // Close the action sheet when the "Cancel" button is clicked
           },
         },
       ],
     });
+    // Present the action sheet
     await actionSheet.present();
-  }
-
-  addPhotoToGallery() {
-    this.photoService.addNewToGallery();
   }
 }
