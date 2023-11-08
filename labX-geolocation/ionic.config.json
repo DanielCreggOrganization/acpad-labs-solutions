@@ -1,0 +1,7 @@
+{
+  "name": "labX-geolocation",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
