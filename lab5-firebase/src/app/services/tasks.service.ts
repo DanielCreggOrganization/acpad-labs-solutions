@@ -32,7 +32,7 @@ export class TasksService {
   // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
   private collectionRef: CollectionReference;
   // Create a BehaviorSubject observable to store the tasks. This will emit the current value of the tasks array.
-  private tasks: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
+  private tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
   // Create a subscription to the tasks collection. This is a subscription to the collection in Firestore.
   private tasksSub!: Subscription;
 
@@ -76,13 +76,13 @@ export class TasksService {
 
     // Update the tasks BehaviorSubject with the new tasks.
     this.tasksSub = collectionSub.subscribe((tasks) => {
-      this.tasks.next(tasks);
+      this.tasks$.next(tasks);
     });
   }
 
   private unsubscribeFromTasks(): void {
     // If there is no user, unsubscribe from the tasks collection and clear the tasks BehaviorSubject.
-    this.tasks.next([]);
+    this.tasks$.next([]);
     if (this.tasksSub) {
       this.tasksSub.unsubscribe();
     }
@@ -103,7 +103,7 @@ export class TasksService {
   // Return the tasks BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
   // The async keyword is not needed here because this method is not dealing with Promises
   readTasks() {
-    return this.tasks.asObservable();
+    return this.tasks$.asObservable();
   }
 
   updateTask(task: Task) {
