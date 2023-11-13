@@ -19,7 +19,6 @@ export interface Task {
   id?: string; // The id is optional because Firestore does not store the id in the document.
   content: string;
   completed: boolean;
-  file?: string;
   user?: string;
 }
 // The @Injectable decorator is used to make the service injectable. The service is injected into the constructor.
@@ -69,14 +68,16 @@ export class TasksService {
     // Create a query to get the tasks for the current user.
     const tasksQuery = query(this.collectionRef, where('user', '==', userId));
 
-    // Subscribe to the tasks collection.
+    // Create an Observable called colledtionSub. This will emit the current value of the tasks array.
     const collectionSub = collectionData(tasksQuery, {
-      idField: 'id',
-    }) as Observable<Task[]>;
+      idField: 'id', // Include the document ID in the emitted data, under the field name 'id'. This is useful because Firestore's document IDs are not included in the document data by default.
+    }) as Observable<Task[]>; // Treat the result of collectionData as an Observable that emits arrays of Task objects
 
-    // Update the tasks BehaviorSubject with the new tasks.
+    // Subscribing to an Observable. This is the process of connecting a consumer (usually a function) to the Observable.
+    // When you subscribe to an Observable, you provide a function that will be called each time the Observable emits a new value. 
+    // In this case, the function takes one argument, tasks, which will be the new value emitted by the Observable.
     this.tasksSub = collectionSub.subscribe((tasks) => {
-      this.tasks$.next(tasks);
+      this.tasks$.next(tasks); // Calling next emits a new value to its subscribers. In this case, it's emitting the tasks value that was just received from collectionSub and it's emitting it to the tasks$ BehaviorSubject.
     });
   }
 
