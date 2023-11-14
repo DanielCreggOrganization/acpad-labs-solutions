@@ -16,7 +16,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs'; // Used to cre
 
 // Task is an interface that defines the structure of a task. The ? after the property name means that the property is optional.
 export interface Task {
-  id?: string; // The id is optional because Firestore does not store the id in the document.
+  id?: string;            // The id is optional because Firestore does not store the id in the document.
   content: string;
   completed: boolean;
   user?: string;
@@ -41,7 +41,6 @@ export class TasksService {
   ) {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
     this.collectionRef = collection(this.firestore, 'tasks');
-
     // Subscribe to the auth state. This will allow us to subscribe to the tasks collection when the user logs in.
     this.subscribeToAuthState();
   }
@@ -53,13 +52,11 @@ export class TasksService {
    * If no user is logged in, it unsubscribes from the tasks by calling `unsubscribeFromTasks`.
    */
   private subscribeToAuthState(): void {
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        // If a user is logged in, subscribe to their tasks.
-        this.subscribeToTasks(user.uid);
-      } else {
-        // If no user is logged in, unsubscribe from tasks.
-        this.unsubscribeFromTasks();
+    onAuthStateChanged(this.auth, (user) => { // When the authentication state changes, check if a user is logged in. 
+      if (user) { // If a user is logged in
+        this.subscribeToTasks(user.uid); // subscribe to users tasks
+      } else { // If no user is logged in 
+        this.unsubscribeFromTasks(); // unsubscribe from tasks. This will save resources and prevent errors.
       }
     });
   }
@@ -81,20 +78,20 @@ export class TasksService {
     });
   }
 
+  // Clear Tasks and unsubscribe from tasks observable. This saves resources and prevents errors.
   private unsubscribeFromTasks(): void {
-    // If there is no user, unsubscribe from the tasks collection and clear the tasks BehaviorSubject.
-    this.tasks$.next([]);
-    if (this.tasksSub) {
-      this.tasksSub.unsubscribe();
+    this.tasks$.next([]); // Clear tasks by emitting an empty array to the tasks$ BehaviorSubject.
+    if (this.tasksSub) { // If there is a subscription to the tasks collection
+      this.tasksSub.unsubscribe(); // unsubscribe from the tasks collection
     }
   }
 
   // Create a task and add it to the tasks collection. This will add a document to the collection on Firestore.
   async createTask(task: Task) {
     try {
-      await addDoc(this.collectionRef, {
-        ...task,
-        user: this.auth.currentUser?.uid,
+      await addDoc(this.collectionRef, { // Add a document to the collection. The first argument is the reference to the collection. The second argument is the document to add to the collection.
+        ...task, // Use the spread operator to add the task properties to the document.
+        user: this.auth.currentUser?.uid, // Add the user id to the document. This will allow us to query the tasks for the current user.
       });
     } catch (error) {
       console.error('Error creating task:', error);
@@ -104,7 +101,7 @@ export class TasksService {
   // Return the tasks BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
   // The async keyword is not needed here because this method is not dealing with Promises
   readTasks() {
-    return this.tasks$.asObservable();
+    return this.tasks$.asObservable(); // Return the tasks$ BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
   }
 
   updateTask(task: Task) {

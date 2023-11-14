@@ -29,18 +29,14 @@ export class HomePage implements AfterViewInit {
     this.resetTask(); // Initialize the newTask property.
   }
 
-  // This method is used to focus the cursor in the input box of the modal when we open it. We subscribe to
-  // the ionModalDidPresent event of the modal. When the modal is presented, we use setTimeout to wait for
-  // the browser to render the modal's DOM elements, then we select the first input element in the modal and focus on it.
-  ngAfterViewInit() {
-    this.modal.ionModalDidPresent.subscribe(() => {
-      setTimeout(() => {
-        const firstInput: any = document.querySelector('ion-modal input');
-        firstInput.focus();
-      }, 250);
-    });
+  // This method is used to reset the newTask property. This will clear the input in the modal.
+  resetTask() {
+    this.newTask = {
+      content: '',
+      completed: false,
+    };
   }
-
+  
   // This method is used to log the user out. The button will be found in the top right corner of the home page.
   async logout() {
     // Call the logout method in the auth service. Use await to wait for the logout to complete before continuing.
@@ -48,20 +44,6 @@ export class HomePage implements AfterViewInit {
     // Navigate to the login page with the replaceUrl option.
     // This means that the login page will replace the home page in the navigation stack.
     this.router.navigateByUrl('/', { replaceUrl: true });
-  }
-
-  // The method is used inside the modal to close the modal and reset the newTask property.
-  cancel() {
-    this.modal.dismiss(null, 'cancel');
-    this.resetTask();
-  }
- 
-  // This method is used to reset the newTask property. This will clear the input in the modal.
-  resetTask() {
-    this.newTask = {
-      content: '',
-      completed: false,
-    };
   }
 
   // This method is used to add a task to the database
@@ -129,5 +111,23 @@ export class HomePage implements AfterViewInit {
     // Print task to console
     console.log('Deleting task: ', task);
     this.tasksService.deleteTask(task);
+  }
+
+  // The method is used inside the modal to close the modal and reset the newTask property.
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+    this.resetTask();
+  }
+
+  // This method is used to focus the cursor in the input box of the modal when we open it. We subscribe to
+  // the ionModalDidPresent event of the modal. When the modal is presented, we use setTimeout to wait for
+  // the browser to render the modal's DOM elements, then we select the first input element in the modal and focus on it.
+  ngAfterViewInit() {
+    this.modal.ionModalDidPresent.subscribe(() => {
+      setTimeout(() => {
+        const firstInput: any = document.querySelector('ion-modal input');
+        firstInput.focus();
+      }, 250);
+    });
   }
 }
