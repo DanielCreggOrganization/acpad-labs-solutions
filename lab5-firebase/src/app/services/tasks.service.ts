@@ -66,7 +66,7 @@ export class TasksService {
     // Create a query to get only the tasks for the current user.
     const tasksQuery = query(this.collectionRef, where('user', '==', userId));
 
-    // Create an Observable. This will emit the current value of the tasks array.
+    // Create an observable that will emit the current value of the tasks array.
     const tasks$ = collectionData(tasksQuery, {
       idField: 'id', // Include the document ID in the emitted data, under the field name 'id'.
     }) as Observable<Task[]>; // Treat the result of collectionData as an Observable that emits arrays of Task objects
