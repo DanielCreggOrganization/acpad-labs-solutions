@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'; // Used to make the service injectable.
 import { Auth, onAuthStateChanged } from '@angular/fire/auth'; // Used to get the current user and subscribe to the auth state.
 import {
   addDoc, // Used to add a document to Firestore.
@@ -19,8 +19,8 @@ export interface Task {
   id?: string;            // The id is optional because Firestore does not store the id in the document.
   content: string;
   completed: boolean;
-  user?: string;
 }
+
 // The @Injectable decorator is used to make the service injectable. The service is injected into the constructor.
 // The providedIn option is used to specify that the service should be provided in the root injector (AppModule).
 // This means that the service will be available to the entire application.
@@ -30,7 +30,7 @@ export interface Task {
 export class TasksService {
   // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
   private collectionRef: CollectionReference;
-  // Create a BehaviorSubject observable to store the tasks. This will emit the current value of the tasks array.
+  // Create a BehaviorSubject observable. This stores the current value of tasks and will emit its current value to any new subscribers immediately upon subscription
   private tasks$: BehaviorSubject<Task[]> = new BehaviorSubject<Task[]>([]);
   // Create a subscription to the tasks collection. This is a subscription to the collection in Firestore.
   private tasksSub!: Subscription;
@@ -40,7 +40,7 @@ export class TasksService {
     private auth: Auth // Inject the Auth service.
   ) {
     // Create a reference to the tasks collection. This is a reference to the collection in Firestore.
-    this.collectionRef = collection(this.firestore, 'tasks');
+    this.collectionRef = collection(this.firestore, 'tasks'); // The second argument is the path to the collection in Firestore.
     // Subscribe to the auth state. This will allow us to subscribe to the tasks collection when the user logs in.
     this.subscribeToAuthState();
   }
@@ -62,12 +62,12 @@ export class TasksService {
   }
 
   private subscribeToTasks(userId: string): void {
-    // Create a query to get the tasks for the current user.
+    // Create a query to get only the tasks for the current user.
     const tasksQuery = query(this.collectionRef, where('user', '==', userId));
 
     // Create an Observable called colledtionSub. This will emit the current value of the tasks array.
     const collectionSub = collectionData(tasksQuery, {
-      idField: 'id', // Include the document ID in the emitted data, under the field name 'id'. This is useful because Firestore's document IDs are not included in the document data by default.
+      idField: 'id', // Include the document ID in the emitted data, under the field name 'id'.
     }) as Observable<Task[]>; // Treat the result of collectionData as an Observable that emits arrays of Task objects
 
     // Subscribing to an Observable. This is the process of connecting a consumer (usually a function) to the Observable.
