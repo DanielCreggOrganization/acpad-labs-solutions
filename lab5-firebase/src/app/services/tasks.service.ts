@@ -66,15 +66,15 @@ export class TasksService {
     // Create a query to get only the tasks for the current user.
     const tasksQuery = query(this.collectionRef, where('user', '==', userId));
 
-    // Create an Observable called colledtion$. This will emit the current value of the tasks array.
-    const collection$ = collectionData(tasksQuery, {
+    // Create an Observable. This will emit the current value of the tasks array.
+    const tasks$ = collectionData(tasksQuery, {
       idField: 'id', // Include the document ID in the emitted data, under the field name 'id'.
     }) as Observable<Task[]>; // Treat the result of collectionData as an Observable that emits arrays of Task objects
 
     // Subscribing to an Observable. This is the process of connecting a consumer (usually a function) to the Observable.
     // When you subscribe to an Observable, you provide a function that will be called each time the Observable emits a new value. 
     // In this case, the function takes one argument, tasks, which will be the new value emitted by the Observable.
-    this.tasksSub = collection$.subscribe((tasks) => {
+    this.tasksSub = tasks$.subscribe((tasks) => {
       this.tasks$.next(tasks); // Calling next emits a new value to its subscribers. In this case, it's emitting the tasks value that was just received from collectionSub and it's emitting it to the tasks$ BehaviorSubject.
     });
   }
