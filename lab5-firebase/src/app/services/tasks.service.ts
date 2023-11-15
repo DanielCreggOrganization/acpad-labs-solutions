@@ -19,6 +19,7 @@ export interface Task {
   id?: string;            // The id is optional because Firestore does not store the id in the document.
   content: string;
   completed: boolean;
+  user?: string;          // The user id is optional because Firestore does not store the user id in the document.
 }
 
 // The @Injectable decorator is used to make the service injectable. The service is injected into the constructor.
@@ -65,15 +66,15 @@ export class TasksService {
     // Create a query to get only the tasks for the current user.
     const tasksQuery = query(this.collectionRef, where('user', '==', userId));
 
-    // Create an Observable called colledtionSub. This will emit the current value of the tasks array.
-    const collectionSub = collectionData(tasksQuery, {
+    // Create an Observable called colledtion$. This will emit the current value of the tasks array.
+    const collection$ = collectionData(tasksQuery, {
       idField: 'id', // Include the document ID in the emitted data, under the field name 'id'.
     }) as Observable<Task[]>; // Treat the result of collectionData as an Observable that emits arrays of Task objects
 
     // Subscribing to an Observable. This is the process of connecting a consumer (usually a function) to the Observable.
     // When you subscribe to an Observable, you provide a function that will be called each time the Observable emits a new value. 
     // In this case, the function takes one argument, tasks, which will be the new value emitted by the Observable.
-    this.tasksSub = collectionSub.subscribe((tasks) => {
+    this.tasksSub = collection$.subscribe((tasks) => {
       this.tasks$.next(tasks); // Calling next emits a new value to its subscribers. In this case, it's emitting the tasks value that was just received from collectionSub and it's emitting it to the tasks$ BehaviorSubject.
     });
   }
@@ -99,9 +100,9 @@ export class TasksService {
   }
 
   // Return the tasks BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
-  // The async keyword is not needed here because this method is not dealing with Promises
+  // The async keyword is not needed here because we are not calling to firestore.
   readTasks() {
-    return this.tasks$.asObservable(); // Return the tasks$ BehaviorSubject as an observable. This will allow us to subscribe to the tasks array.
+    return this.tasks$.asObservable(); //returning an Observable version of the tasks$ BehaviorSubject that can be safely exposed to consumers
   }
 
   updateTask(task: Task) {

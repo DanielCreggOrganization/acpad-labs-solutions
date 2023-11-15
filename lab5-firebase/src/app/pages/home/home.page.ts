@@ -16,7 +16,7 @@ import {
 })
 export class HomePage implements AfterViewInit {
   newTask!: Task; // This is the task that will be added to the database.
-  @ViewChild(IonModal) modal!: IonModal; // This is a reference to the modal in the HTML.
+  @ViewChild(IonModal) modal!: IonModal; // Find the first IonModal in my template and assign it to the modal property of my class.
   tasks$ = this.tasksService.readTasks(); // This is an observable that will emit the current value of the tasks array.
 
   constructor(
