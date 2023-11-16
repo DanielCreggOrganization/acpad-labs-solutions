@@ -6,6 +6,7 @@ import {
   canActivate, // Used to protect routes by checking if user is logged in.
 } from '@angular/fire/auth-guard';
 
+// Define functions to redirect unauthorized and logged-in users to specific routes
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['/']);
 const redirectLoggedInToApp = () => redirectLoggedInTo(['home']);
 
