@@ -1,7 +1,0 @@
-{
-  "name": "labX-native",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}
