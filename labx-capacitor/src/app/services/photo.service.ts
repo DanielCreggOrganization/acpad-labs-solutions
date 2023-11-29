@@ -7,6 +7,7 @@ import { Preferences } from '@capacitor/preferences';
   providedIn: 'root'
 })
 export class PhotoService {
+  public photos: UserPhoto[] = [];
 
   constructor() { }
 
@@ -19,4 +20,9 @@ export class PhotoService {
     });
   }
 
+}
+
+export interface UserPhoto {
+  filepath: string;
+  webviewPath?: string;
 }
