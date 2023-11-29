@@ -18,6 +18,12 @@ export class PhotoService {
       source: CameraSource.Camera,
       quality: 100
     });
+
+    // Save the picture and add it to photos collection
+    this.photos.unshift({
+      filepath: "soon...",
+      webviewPath: capturedPhoto.webPath!
+    });
   }
 
 }
