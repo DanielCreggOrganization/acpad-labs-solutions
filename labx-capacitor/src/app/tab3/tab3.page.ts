@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-tab3',
@@ -6,7 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  coordinates: any;
 
-  constructor() {}
-
+  constructor() { }
+  
+  async locateMe() {
+    const position = await Geolocation.getCurrentPosition();
+    this.coordinates = position.coords;
+  }
 }
